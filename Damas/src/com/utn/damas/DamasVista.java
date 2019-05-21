@@ -2,15 +2,19 @@ package com.utn.damas;
 
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
 public class DamasVista extends JFrame{
+private	Casilla[][] tablero;
 
-	public DamasVista() {
+	public DamasVista(Casilla[][] tablero) {
         super();                    // usamos el contructor de la clase padre JFrame
         configurarVentana();        // configuramos la ventana
+        this.tablero = tablero;
     }
 
     private void configurarVentana() {
@@ -23,27 +27,24 @@ public class DamasVista extends JFrame{
         this.setVisible(true);
     }
 	
-    public void DibujarPantalla(int[][] js)
+    public void DibujarPantalla()
     {
     	Container cp = getContentPane();
     	 GridLayout gl = new GridLayout(4,4);
     	 gl.setHgap(5); gl.setVgap(5);
     	 cp.setLayout(gl);
     	 
-    	 String valor;
-    	 
     	 for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				
-				if(js[i][j]!=0)
-					valor =String.valueOf(js[i][j]);
-				else
-					valor = "";
-				
-				cp.add(new JButton(valor));
+				//JButton b = new JButton(valor);
+				//tablero[i][j].addActionListener(this);
+				cp.add(tablero[i][j]);
 			}
 		}
     	 
     }
+    
+   
     
 }
