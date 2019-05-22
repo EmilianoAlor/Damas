@@ -7,8 +7,10 @@ public class DamasControlador implements ActionListener {
 private DamasVista DV;
 private DamasModelo DM;
 private	Casilla[][] tablero;
-
-
+private boolean Seleccion=false;
+private Casilla Actual;
+private Casilla Anterior;
+private Casilla Selecionada;
 
 	public DamasControlador(DamasModelo dM, DamasVista dV) {
 		DV = dV;
@@ -25,6 +27,33 @@ private	Casilla[][] tablero;
 	}
 
 	 public void actionPerformed(ActionEvent e) {
+		 
+//		  	Anterior = Actual;
+		 	Actual = (Casilla) e.getSource();
+		 	
+		 	if(Actual.getEstado()!=0) 
+		 	{
+		 		
+			 	if(Selecionada == Actual && Seleccion==true)
+			 	{
+			 		Seleccion=false;
+			 		DV.DesSelecionarCasilla(Selecionada);
+			 		Selecionada = null;
+			 	}
+			 	else
+			 	{
+				 	
+				 		if(Seleccion==false)
+				 		{
+				 			Selecionada = Actual;
+				 			DV.SelecionarCasilla(Selecionada);
+				 			Seleccion=true;
+				 		}
+			 	}
+		 	}
+//		 	else
+//		 		Actual=Anterior;
+		 	
 	        if (e.getSource()==tablero[0][0]) {
 	        	System.out.println("boton 0-0 x");
 	        }
