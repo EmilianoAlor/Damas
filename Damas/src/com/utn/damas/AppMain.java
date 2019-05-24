@@ -8,14 +8,8 @@ public class AppMain {
 		
 		DamasControlador Dcontrol = new DamasControlador(DM,DV);
 
-		boolean valorboo;
-
-		valorboo = Dcontrol.siguiente();
+		Dcontrol.siguiente();
 		
-//		while(valorboo== true)
-//		{
-//			//valorboo = Dcontrol.siguiente();
-//		}
 	}
 	
 	

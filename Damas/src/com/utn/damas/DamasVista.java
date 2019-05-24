@@ -38,27 +38,19 @@ private Color gris = new Color(238,238,238);
     public void DibujarPantalla()
     {
     	Container cp = getContentPane();
-    	 GridLayout gl = new GridLayout(4,4);
+    	 GridLayout gl = new GridLayout(10,10);
     	 gl.setHgap(5); gl.setVgap(5);
     	 cp.setLayout(gl);
     	 
-    	 
-    	 boolean color=true;
-    	 
-    	 for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				
-				//JButton b = new JButton(valor);
-				//tablero[i][j].addActionListener(this);
-			tablero[i][j].setText(tablero[i][j].GetNombre());
+    	 for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				tablero[i][j].setText(tablero[i][j].GetNombre());
 			
 			if((i+j)%2 ==0)
-				tablero[i][j].setBackground(gris);
-			else
 				tablero[i][j].setBackground(Color.WHITE);
+			else
+				tablero[i][j].setBackground(gris);
 
-//			 tablero[i][j].setForeground(Color.BLACK);
-//			 tablero[i][j].setBackground(Color.WHITE);
 //			 Border line = new LineBorder(Color.BLACK);
 //			 Border margin = new EmptyBorder(5, 15, 5, 15);
 //			 Border compound = new CompoundBorder(line, margin);
@@ -73,7 +65,7 @@ private Color gris = new Color(238,238,238);
     public void SelecionarCasilla(Casilla Actual)
 	 {
     	Actual.setForeground(Color.BLACK);
-    	Actual.setBackground(Color.RED);//Color.WHITE);
+    	Actual.setBackground(Color.RED);
 	 }
    
     public void DesSelecionarCasilla(Casilla Actual)
@@ -81,8 +73,17 @@ private Color gris = new Color(238,238,238);
 	   	Actual.setForeground(Color.BLACK);
 	   	
 	   	if((Actual.getSumaCasilla())%2 ==0)
-	   		Actual.setBackground(gris);
-	   	else
 	   		Actual.setBackground(Color.WHITE);
+	   	else
+	   		Actual.setBackground(gris);
 	 }
+    
+    public void Redibujar()
+    {
+    	for (int i = 0; i < 10; i++) 
+			for (int j = 0; j < 10; j++) 
+				tablero[i][j].setText(tablero[i][j].GetNombre());
+    	
+    }
+    
 }

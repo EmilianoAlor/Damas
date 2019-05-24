@@ -9,18 +9,15 @@ private DamasModelo DM;
 private	Casilla[][] tablero;
 private boolean Seleccion=false;
 private Casilla Actual;
-private Casilla Anterior;
-private Casilla Selecionada;
+private Casilla Seleccionada;
 
 	public DamasControlador(DamasModelo dM, DamasVista dV) {
 		DV = dV;
 		DM = dM;
 		this.tablero = DM.getTablero();
 		
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				
-				//JButton b = new JButton(valor);
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
 				tablero[i][j].addActionListener(this);
 			}
 		}
@@ -28,85 +25,158 @@ private Casilla Selecionada;
 
 	 public void actionPerformed(ActionEvent e) {
 		 
-//		  	Anterior = Actual;
 		 	Actual = (Casilla) e.getSource();
-		 	
-		 	if(Actual.getEstado()!=0) 
+		 	System.out.println("Boton " + Actual.getFila() + "-" + Actual.getColumna());
+		 	if(Actual.getJugador()!=0) // la celda esta ocupada
 		 	{
-		 		
-			 	if(Selecionada == Actual && Seleccion==true)
+			 	if(Seleccionada == Actual && Seleccion==true)
 			 	{
 			 		Seleccion=false;
-			 		DV.DesSelecionarCasilla(Selecionada);
-			 		Selecionada = null;
+			 		DV.DesSelecionarCasilla(Seleccionada);
+			 		Seleccionada = null;
 			 	}
 			 	else
 			 	{
-				 	
 				 		if(Seleccion==false)
 				 		{
-				 			Selecionada = Actual;
-				 			DV.SelecionarCasilla(Selecionada);
+				 			Seleccionada = Actual;
+				 			DV.SelecionarCasilla(Seleccionada);
 				 			Seleccion=true;
 				 		}
 			 	}
 		 	}
-//		 	else
-//		 		Actual=Anterior;
-		 	
-	        if (e.getSource()==tablero[0][0]) {
-	        	System.out.println("boton 0-0 x");
-	        }
-	        if (e.getSource()==tablero[0][1]) {
-	        	System.out.println("boton 0-1");
-	        }
-	        if (e.getSource()==tablero[0][2]) {
-	        	System.out.println("boton 0-2");
-	        }
-	        if (e.getSource()==tablero[0][3]) {
-	        	System.out.println("boton 0-3");
-	        }
-	        //**********************************************************
-	        if (e.getSource()==tablero[1][0]) {
-	        	System.out.println("boton 1-0");
-	        }
-	        if (e.getSource()==tablero[1][1]) {
-	        	System.out.println("boton 1-1");
-	        }
-	        if (e.getSource()==tablero[1][2]) {
-	        	System.out.println("boton 1-2");
-	        }
-	        if (e.getSource()==tablero[1][3]) {
-	        	System.out.println("boton 1-3");
-	        }
-	      //**********************************************************
-	        if (e.getSource()==tablero[2][0]) {
-	        	System.out.println("boton 2-0");
-	        }
-	        if (e.getSource()==tablero[2][1]) {
-	        	System.out.println("boton 2-1");
-	        }
-	        if (e.getSource()==tablero[2][2]) {
-	        	System.out.println("boton 2-2");
-	        }
-	        if (e.getSource()==tablero[2][3]) {
-	        	System.out.println("boton 2-3");
-	        }
-	        
-	      //**********************************************************
-	        if (e.getSource()==tablero[3][0]) {
-	        	System.out.println("boton 3-0");
-	        }
-	        if (e.getSource()==tablero[3][1]) {
-	        	System.out.println("boton 3-1");
-	        }
-	        if (e.getSource()==tablero[3][2]) {
-	        	System.out.println("boton 3-2");
-	        }
-	        if (e.getSource()==tablero[3][3]) {
-	        	System.out.println("boton 3-3");
-	        }
+		 	else //celda vacia para posible movimiento.
+		 		ComportamientoPiesa();
 	    }
+	
+	private void ComportamientoPiesa() {
+		int direccion=0; //Direccion de las fichas 
+		
+		
+		
+		if(Seleccion == true && Seleccionada != Actual) //hya una pieza seleccionada y la siguiente es distinta.
+		{
+			switch (Seleccionada.getPiesa()) {
+			case FICHA:
+				if(Actual.getJugador()==0) //Movimiento a casilla vacia.
+				{
+					if(Seleccionada.getJugador() == 1)
+						direccion = 1;
+					
+					if(Seleccionada.getJugador() == 2)
+						direccion = -1;
+					
+					if(Actual.getFila()==Seleccionada.getFila()+1*direccion && (Actual.getColumna()==Seleccionada.getColumna()-1 || Actual.getColumna()==Seleccionada.getColumna()+1))
+					{
+						Actual.SetJugadorPiesa(Seleccionada.getJugador(), Seleccionada.getPiesa());
+						
+						if(direccion == 1 && (Actual.getFila() == DM.getFilaMax()-1))
+							Actual.setPiesa(Piesa.REINA);
+						
+						if(direccion == -1 && (Actual.getFila() == 0))
+							Actual.setPiesa(Piesa.REINA);
+
+						Seleccionada.SetJugadorPiesa(0, null);
+						
+						Seleccion=false;
+				 		DV.DesSelecionarCasilla(Seleccionada);
+				 		Seleccionada = null;
+				 		DV.Redibujar();
+					}else if(Actual.getFila()==Seleccionada.getFila()+2*direccion && (Actual.getColumna()==Seleccionada.getColumna()-2 || Actual.getColumna()==Seleccionada.getColumna()+2))
+					{
+						if(ComerFicha(direccion))
+						{
+							Actual.SetJugadorPiesa(Seleccionada.getJugador(), Seleccionada.getPiesa());
+							
+							if(direccion == 1 && (Actual.getFila() == DM.getFilaMax()-1))
+								Actual.setPiesa(Piesa.REINA);
+							
+							if(direccion == -1 && (Actual.getFila() == 0))
+								Actual.setPiesa(Piesa.REINA);
+							
+							Seleccionada.SetJugadorPiesa(0, null);
+							
+							Seleccion=false;
+					 		DV.DesSelecionarCasilla(Seleccionada);
+					 		Seleccionada = null;
+					 		DV.Redibujar();
+						}
+					}
+				}
+				break;
+			case REINA:
+				if(Actual.getJugador()==0) //Movimiento a casilla vacia.
+				{
+					if((Actual.getFila()==Seleccionada.getFila()+1 || Actual.getFila()==Seleccionada.getFila()-1) && (Actual.getColumna()==Seleccionada.getColumna()-1 || Actual.getColumna()==Seleccionada.getColumna()+1))
+					{
+						Actual.SetJugadorPiesa(Seleccionada.getJugador(), Seleccionada.getPiesa());
+						Seleccionada.SetJugadorPiesa(0, null);
+						
+						Seleccion=false;
+				 		DV.DesSelecionarCasilla(Seleccionada);
+				 		Seleccionada = null;
+				 		DV.Redibujar();
+		
+					}else if((Actual.getFila()==Seleccionada.getFila()+2 || Actual.getFila()==Seleccionada.getFila()-2) && (Actual.getColumna()==Seleccionada.getColumna()-2 || Actual.getColumna()==Seleccionada.getColumna()+2))
+					{
+						if(ComerFicha(direccion))
+						{
+							Actual.SetJugadorPiesa(Seleccionada.getJugador(), Seleccionada.getPiesa());
+							Seleccionada.SetJugadorPiesa(0, null);
+							
+							Seleccion=false;
+					 		DV.DesSelecionarCasilla(Seleccionada);
+					 		Seleccionada = null;
+					 		DV.Redibujar();
+						}
+					}
+				}
+				break;
+			default:
+				{
+					System.out.println("La piesa no esta configurada.");
+				break;
+				}
+			}
+		}
+	}
+
+	
+	public boolean ComerFicha(int direccion){
+		int fila=0,columna=0;
+		
+		if(Seleccionada.getFila()<Actual.getFila() && Seleccionada.getColumna()<Actual.getColumna())
+		{
+			fila=Actual.getFila()-1;
+			columna=Actual.getColumna()-1;	
+		}
+		
+		if(Seleccionada.getFila()<Actual.getFila() && Seleccionada.getColumna()>Actual.getColumna())
+		{
+			fila=Actual.getFila()-1;
+			columna=Actual.getColumna()+1;	
+		}
+		
+		if(Seleccionada.getFila()>Actual.getFila() && Seleccionada.getColumna()<Actual.getColumna())
+		{
+			fila=Actual.getFila()+1;
+			columna=Actual.getColumna()-1;	
+		}
+		
+		if(Seleccionada.getFila()>Actual.getFila() && Seleccionada.getColumna()>Actual.getColumna())
+		{
+			fila=Actual.getFila()+1;
+			columna=Actual.getColumna()+1;	
+		}
+		
+		if(tablero[fila][columna].getJugador()!=Seleccionada.getJugador())
+		{
+			tablero[fila][columna].SetJugadorPiesa(0, null);
+			return true;
+		}
+		else
+			return false;
+	}
 	
 	public boolean siguiente()
 	{
