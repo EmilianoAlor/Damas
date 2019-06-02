@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.border.Border;
@@ -44,12 +45,12 @@ private Color gris = new Color(238,238,238);
     	 
     	 for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				tablero[i][j].setText(tablero[i][j].GetNombre());
-			
-			if((i+j)%2 ==0)
-				tablero[i][j].setBackground(Color.WHITE);
-			else
-				tablero[i][j].setBackground(gris);
+				tablero[i][j].setText(null);//tablero[i][j].GetNombre());
+				
+				if((i+j)%2 ==0)
+					tablero[i][j].setBackground(Color.WHITE);
+				else
+					tablero[i][j].setBackground(gris);
 
 //			 Border line = new LineBorder(Color.BLACK);
 //			 Border margin = new EmptyBorder(5, 15, 5, 15);
@@ -60,6 +61,7 @@ private Color gris = new Color(238,238,238);
 				cp.add(tablero[i][j]);
 			}
 		}
+    	 Redibujar();
     }
     
     public void SelecionarCasilla(Casilla Actual)
@@ -82,8 +84,33 @@ private Color gris = new Color(238,238,238);
     {
     	for (int i = 0; i < 10; i++) 
 			for (int j = 0; j < 10; j++) 
-				tablero[i][j].setText(tablero[i][j].GetNombre());
-    	
+				{
+				
+				if(tablero[i][j].getPiesa()==null)
+					tablero[i][j].setIcon(null);
+				else
+				{
+					
+					if(tablero[i][j].getPiesa()== Piesa.FICHA)
+					{
+						if(tablero[i][j].getJugador()==1)
+							tablero[i][j].setIcon(new ImageIcon("F:\\JAVA WEB\\Damas\\Damas\\Imagenes\\FichaBlanca.jpg"));
+						if(tablero[i][j].getJugador()==2)
+							tablero[i][j].setIcon(new ImageIcon("F:\\JAVA WEB\\Damas\\Damas\\Imagenes\\FichaNegra.jpg"));
+					}
+					else if(tablero[i][j].getPiesa()== Piesa.REINA)
+					{
+						if(tablero[i][j].getJugador()==1)
+							tablero[i][j].setIcon(new ImageIcon("F:\\JAVA WEB\\Damas\\Damas\\Imagenes\\ReinaBlanca.jpg"));
+						if(tablero[i][j].getJugador()==2)
+							tablero[i][j].setIcon(new ImageIcon("F:\\JAVA WEB\\Damas\\Damas\\Imagenes\\ReinaNegra.jpg"));
+					}
+					else
+						tablero[i][j].setIcon(null);
+				}
+				//tablero[i][j].setIcon(new ImageIcon("F:\\JAVA WEB\\Damas\\Damas\\Imagenes\\FichaBlanca.jpg"));
+				//tablero[i][j].setText(tablero[i][j].GetNombre());
+			}
     }
     
 }

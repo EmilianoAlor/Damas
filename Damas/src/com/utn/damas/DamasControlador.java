@@ -10,6 +10,9 @@ private	Casilla[][] tablero;
 private boolean Seleccion=false;
 private Casilla Actual;
 private Casilla Seleccionada;
+private int JugadorInicial=1;
+private int Jugador_turno;
+int direccion=0; //Direccion de las fichas 
 
 	public DamasControlador(DamasModelo dM, DamasVista dV) {
 		DV = dV;
@@ -27,7 +30,11 @@ private Casilla Seleccionada;
 		 
 		 	Actual = (Casilla) e.getSource();
 		 	System.out.println("Boton " + Actual.getFila() + "-" + Actual.getColumna());
-		 	if(Actual.getJugador()!=0) // la celda esta ocupada
+		 	
+		 	int jugador_Actual;//Jugador_turno
+		 	
+		 	jugador_Actual = Actual.getJugador();
+		 	if(jugador_Actual!=0 ) // la celda esta ocupada && jugador_Actual==Jugador_turno
 		 	{
 			 	if(Seleccionada == Actual && Seleccion==true)
 			 	{
@@ -50,9 +57,6 @@ private Casilla Seleccionada;
 	    }
 	
 	private void ComportamientoPiesa() {
-		int direccion=0; //Direccion de las fichas 
-		
-		
 		
 		if(Seleccion == true && Seleccionada != Actual) //hya una pieza seleccionada y la siguiente es distinta.
 		{
@@ -68,38 +72,13 @@ private Casilla Seleccionada;
 					
 					if(Actual.getFila()==Seleccionada.getFila()+1*direccion && (Actual.getColumna()==Seleccionada.getColumna()-1 || Actual.getColumna()==Seleccionada.getColumna()+1))
 					{
-						Actual.SetJugadorPiesa(Seleccionada.getJugador(), Seleccionada.getPiesa());
+						movimientoPiesa();
 						
-						if(direccion == 1 && (Actual.getFila() == DM.getFilaMax()-1))
-							Actual.setPiesa(Piesa.REINA);
-						
-						if(direccion == -1 && (Actual.getFila() == 0))
-							Actual.setPiesa(Piesa.REINA);
-
-						Seleccionada.SetJugadorPiesa(0, null);
-						
-						Seleccion=false;
-				 		DV.DesSelecionarCasilla(Seleccionada);
-				 		Seleccionada = null;
-				 		DV.Redibujar();
 					}else if(Actual.getFila()==Seleccionada.getFila()+2*direccion && (Actual.getColumna()==Seleccionada.getColumna()-2 || Actual.getColumna()==Seleccionada.getColumna()+2))
 					{
 						if(ComerFicha(direccion))
 						{
-							Actual.SetJugadorPiesa(Seleccionada.getJugador(), Seleccionada.getPiesa());
-							
-							if(direccion == 1 && (Actual.getFila() == DM.getFilaMax()-1))
-								Actual.setPiesa(Piesa.REINA);
-							
-							if(direccion == -1 && (Actual.getFila() == 0))
-								Actual.setPiesa(Piesa.REINA);
-							
-							Seleccionada.SetJugadorPiesa(0, null);
-							
-							Seleccion=false;
-					 		DV.DesSelecionarCasilla(Seleccionada);
-					 		Seleccionada = null;
-					 		DV.Redibujar();
+					 		movimientoPiesa();
 						}
 					}
 				}
@@ -109,25 +88,13 @@ private Casilla Seleccionada;
 				{
 					if((Actual.getFila()==Seleccionada.getFila()+1 || Actual.getFila()==Seleccionada.getFila()-1) && (Actual.getColumna()==Seleccionada.getColumna()-1 || Actual.getColumna()==Seleccionada.getColumna()+1))
 					{
-						Actual.SetJugadorPiesa(Seleccionada.getJugador(), Seleccionada.getPiesa());
-						Seleccionada.SetJugadorPiesa(0, null);
-						
-						Seleccion=false;
-				 		DV.DesSelecionarCasilla(Seleccionada);
-				 		Seleccionada = null;
-				 		DV.Redibujar();
-		
-					}else if((Actual.getFila()==Seleccionada.getFila()+2 || Actual.getFila()==Seleccionada.getFila()-2) && (Actual.getColumna()==Seleccionada.getColumna()-2 || Actual.getColumna()==Seleccionada.getColumna()+2))
+				 		movimientoPiesa();
+					}
+					else if((Actual.getFila()==Seleccionada.getFila()+2 || Actual.getFila()==Seleccionada.getFila()-2) && (Actual.getColumna()==Seleccionada.getColumna()-2 || Actual.getColumna()==Seleccionada.getColumna()+2))
 					{
 						if(ComerFicha(direccion))
 						{
-							Actual.SetJugadorPiesa(Seleccionada.getJugador(), Seleccionada.getPiesa());
-							Seleccionada.SetJugadorPiesa(0, null);
-							
-							Seleccion=false;
-					 		DV.DesSelecionarCasilla(Seleccionada);
-					 		Seleccionada = null;
-					 		DV.Redibujar();
+					 		movimientoPiesa();
 						}
 					}
 				}
@@ -141,6 +108,25 @@ private Casilla Seleccionada;
 		}
 	}
 
+	private void movimientoPiesa()
+	{
+		Actual.SetJugadorPiesa(Seleccionada.getJugador(), Seleccionada.getPiesa());
+		
+		if(Seleccionada.getPiesa()==Piesa.FICHA) 
+		{
+			if(direccion == 1 && (Actual.getFila() == DM.getFilaMax()-1))
+				Actual.setPiesa(Piesa.REINA);
+			
+			if(direccion == -1 && (Actual.getFila() == 0))
+				Actual.setPiesa(Piesa.REINA);
+		}
+		
+		Seleccionada.SetJugadorPiesa(0, null);
+		Seleccion=false;
+ 		DV.DesSelecionarCasilla(Seleccionada);
+ 		Seleccionada = null;
+ 		DV.Redibujar();
+	}
 	
 	public boolean ComerFicha(int direccion){
 		int fila=0,columna=0;
@@ -180,6 +166,7 @@ private Casilla Seleccionada;
 	
 	public boolean siguiente()
 	{
+		Jugador_turno = JugadorInicial;
 		DV.DibujarPantalla();
 		return true;
 	}
