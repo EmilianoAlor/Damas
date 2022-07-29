@@ -108,8 +108,6 @@ private Color gris = new Color(238,238,238);
 					else
 						tablero[i][j].setIcon(null);
 				}
-				//tablero[i][j].setIcon(new ImageIcon("F:\\JAVA WEB\\Damas\\Damas\\Imagenes\\FichaBlanca.jpg"));
-				//tablero[i][j].setText(tablero[i][j].GetNombre());
 			}
     }
     
